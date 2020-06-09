@@ -1,0 +1,69 @@
+class Player extends Entity {
+  right = false;
+  left = false;
+  up = false;
+  down = false;
+  speed = 2;
+
+  rightPlayer = [];
+  leftPlayer = [];
+  idlePlayer = [];
+  frames = 0;
+  maxFrames = 6;
+  index = 0;
+  maxIndex = 6;
+  moved = false;
+
+  constructor(x, y, width, height, sprite) {
+    super(x, y, width, height, sprite);
+
+    for (let i = 0; i < this.maxIndex; i++) {
+      this.rightPlayer.push(spritesheet.getSprite(0 + (16 * i), 2 * 18, 16, 18));
+    }
+
+    for (let i = 0; i < this.maxIndex; i++) {
+      this.leftPlayer.push(spritesheet.getSprite(0 + (16 * i), 18, 16, 18));
+    }
+
+    this.idlePlayer.push(spritesheet.getSprite(0, -1, 16, 18));
+  }
+
+  tick() {
+    this.moved = false;
+    if (this.right) {
+      this.moved = true;
+      this.x += this.speed;
+    } else if (this.left) {
+      this.moved = true;
+      this.x -= this.speed;
+    } else if (this.up) {
+      this.moved = true;
+      this.y -= this.speed;
+    } else if (this.down) {
+      this.moved = true;
+      this.y += this.speed;
+    }
+
+    if (this.moved) {
+      this.frames++;
+
+      if (this.frames > this.maxFrames) {
+        this.frames = 0;
+        this.index++;
+        if (this.index === this.maxIndex) {
+          this.index = 0
+        }
+      }
+    }
+  }
+
+  render(context) {
+    if (this.right) {
+      context.drawImage(this.rightPlayer[this.index], this.x, this.y);
+    } else if (this.left) {
+      context.drawImage(this.leftPlayer[this.index], this.x, this.y);
+    } else {
+      context.drawImage(this.idlePlayer[0], this.x, this.y);
+    }
+  }
+}
