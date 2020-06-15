@@ -1,8 +1,28 @@
 class World {
-  tiles = [];
+  static tiles = [];
   init = [];
   static width;
   static height;
+  static TILE_SIZE = 16;
+
+  static isFree(xNext, yNext) {
+    let x1 = parseInt(xNext / World.TILE_SIZE);
+    let y1 = parseInt(yNext / World.TILE_SIZE);
+
+    let x2 = parseInt((xNext + World.TILE_SIZE - 1) / World.TILE_SIZE);
+    let y2 = parseInt(yNext / World.TILE_SIZE);
+
+    let x3 = parseInt(xNext / World.TILE_SIZE);
+    let y3 = parseInt((yNext + World.TILE_SIZE - 1) / World.TILE_SIZE);
+
+    let x4 = parseInt((xNext + World.TILE_SIZE - 1) / World.TILE_SIZE);
+    let y4 = parseInt((yNext + World.TILE_SIZE - 1) / World.TILE_SIZE);
+
+    return !(World.tiles[x1 + (y1 * this.width)] instanceof WallTile ||
+      World.tiles[x2 + (y2 * this.width)] instanceof WallTile ||
+      World.tiles[x3 + (y3 * this.width)] instanceof WallTile ||
+      World.tiles[x4 + (y4 * this.width)] instanceof WallTile);
+  }
 
   loadImage(path) {
     let map = new Image();
@@ -17,19 +37,19 @@ class World {
             this.init[xx + (yy * map.width)] = new FloorTile(xx * 16, yy * 16, null)
 
             if (color === '0, 0, 0') {
-              this.tiles[xx + (yy * map.width)] = new FloorTile(xx * 16, yy * 16, null)
+              World.tiles[xx + (yy * map.width)] = new FloorTile(xx * 16, yy * 16, null)
             } else if (color === '255, 255, 255') {
-              this.tiles[xx + (yy * map.width)] = new WallTile(xx * 16, yy * 16, null)
+              World.tiles[xx + (yy * map.width)] = new WallTile(xx * 16, yy * 16, null)
             }
             else if (color === '255, 205, 210') {
-              this.tiles[xx + (yy * map.width)] = new LifePack(xx * 16, yy * 16, null)
+              World.tiles[xx + (yy * map.width)] = new LifePack(xx * 16, yy * 16, null)
             }
             else if (color === '244, 67, 54') {
-              this.tiles[xx + (yy * map.width)] = new Enemy(xx * 16, yy * 16, null)
+              World.tiles[xx + (yy * map.width)] = new Enemy(xx * 16, yy * 16, null)
 
             }
             else {
-              this.tiles[xx + (yy * map.width)] = new FloorTile(xx * 16, yy * 16, null)
+              World.tiles[xx + (yy * map.width)] = new FloorTile(xx * 16, yy * 16, null)
             }
           }
         }
@@ -69,7 +89,7 @@ class World {
   }
 
   render(context) {
-    if (this.tiles.length > 0) {
+    if (World.tiles.length > 0) {
       let xStart = parseInt(Camera.x / 16);
       let yStart = parseInt(Camera.y / 16);
 
@@ -81,7 +101,7 @@ class World {
           if (xx < 0 || yy < 0 || xx >= World.width || yy >= World.height) {
             continue;
           }
-          const tile = this.tiles[xx + (yy * World.width)];
+          const tile = World.tiles[xx + (yy * World.width)];
           const init = this.init[xx + (yy * World.width)];
           init.render(context);
           tile.render(context);

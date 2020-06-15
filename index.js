@@ -20,7 +20,7 @@ function init() {
 
   spritesheet = new Spritesheet();
   spritesheet.loadImage('./imgs/spritesheet.png').then(() => {
-    player = new Player(0, 0, 16, 16, spritesheet.getSprite(0, 0, 16 * 6, (16 * 3)));
+    player = new Player(20, 30, 16, 16, spritesheet.getSprite(0, 0, 16 * 6, (16 * 3)));
     entities.push(player);
   })
 

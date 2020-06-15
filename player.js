@@ -30,16 +30,16 @@ class Player extends Entity {
 
   tick() {
     this.moved = false;
-    if (this.right) {
+    if (this.right && World.isFree(this.x + this.speed, this.y)) {
       this.moved = true;
       this.x += this.speed;
-    } else if (this.left) {
+    } else if (this.left && World.isFree(this.x - this.speed, this.y)) {
       this.moved = true;
       this.x -= this.speed;
-    } else if (this.up) {
+    } else if (this.up && World.isFree(this.x, this.y - this.speed)) {
       this.moved = true;
       this.y -= this.speed;
-    } else if (this.down) {
+    } else if (this.down && World.isFree(this.x, this.y + this.speed)) {
       this.moved = true;
       this.y += this.speed;
     }
