@@ -6,7 +6,7 @@ class WallTile extends Tile {
 
   render(context) {
 
-    context.drawImage(this.sprite, this.x, this.y);
+    context.drawImage(this.sprite, this.x - Camera.x, this.y - Camera.y);
 
   }
 }

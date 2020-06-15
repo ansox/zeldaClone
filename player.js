@@ -55,15 +55,18 @@ class Player extends Entity {
         }
       }
     }
+
+    Camera.x = Camera.clamp(this.x - (WIDTH / 2), 0, World.width * 16 - WIDTH);
+    Camera.y = Camera.clamp(this.y - (HEIGHT / 2), 0, World.height * 16 - HEIGHT);
   }
 
   render(context) {
     if (this.right) {
-      context.drawImage(this.rightPlayer[this.index], this.x, this.y);
+      context.drawImage(this.rightPlayer[this.index], this.x - Camera.x, this.y - Camera.y);
     } else if (this.left) {
-      context.drawImage(this.leftPlayer[this.index], this.x, this.y);
+      context.drawImage(this.leftPlayer[this.index], this.x - Camera.x, this.y - Camera.y);
     } else {
-      context.drawImage(this.idlePlayer[0], this.x, this.y);
+      context.drawImage(this.idlePlayer[0], this.x - Camera.x, this.y - Camera.y);
     }
   }
 }

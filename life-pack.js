@@ -4,7 +4,7 @@ class LifePack extends Entity {
   sprite = spritesheet.getSprite(0, 5 * 16, this.width, this.heigth);
 
   render(context) {
-    context.drawImage(this.sprite, this.x, this.y);
+    context.drawImage(this.sprite, this.x - Camera.x, this.y - Camera.y);
   }
 
 }

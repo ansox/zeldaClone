@@ -4,6 +4,6 @@ class FloorTile extends Tile {
   sprite = spritesheet.getSprite(0, 3 * 16, this.width, this.heigth);
 
   render(context) {
-    context.drawImage(this.sprite, this.x, this.y);
+    context.drawImage(this.sprite, this.x - Camera.x, this.y - Camera.y);
   }
 }

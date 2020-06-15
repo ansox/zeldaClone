@@ -1,8 +1,8 @@
 class World {
   tiles = [];
   init = [];
-  width;
-  height;
+  static width;
+  static height;
 
   loadImage(path) {
     let map = new Image();
@@ -23,7 +23,6 @@ class World {
             }
             else if (color === '255, 205, 210') {
               this.tiles[xx + (yy * map.width)] = new LifePack(xx * 16, yy * 16, null)
-
             }
             else if (color === '244, 67, 54') {
               this.tiles[xx + (yy * map.width)] = new Enemy(xx * 16, yy * 16, null)
@@ -44,11 +43,11 @@ class World {
 
   getMapColor(map) {
     const canvas = document.createElement('canvas');
-    this.width = map.width;
-    this.height = map.height;
+    World.width = map.width;
+    World.height = map.height;
 
-    canvas.width = this.width;
-    canvas.height = this.height;
+    canvas.width = World.width;
+    canvas.height = World.height;
 
     const context = canvas.getContext('2d');
     context.drawImage(map, 0, 0, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
@@ -70,13 +69,25 @@ class World {
   }
 
   render(context) {
-    for (let xx = 0; xx < this.width; xx++) {
-      for (let yy = 0; yy < this.height; yy++) {
-        const tile = this.tiles[xx + (yy * this.width)];
-        const init = this.init[xx + (yy * this.width)];
-        init.render(context);
-        tile.render(context);
+    if (this.tiles.length > 0) {
+      let xStart = parseInt(Camera.x / 16);
+      let yStart = parseInt(Camera.y / 16);
+
+      let xFinal = parseInt(xStart + (WIDTH / 16));
+      let yFinal = parseInt(yStart + (HEIGHT / 16));
+
+      for (let xx = 0; xx <= xFinal; xx++) {
+        for (let yy = 0; yy <= yFinal; yy++) {
+          if (xx < 0 || yy < 0 || xx >= World.width || yy >= World.height) {
+            continue;
+          }
+          const tile = this.tiles[xx + (yy * World.width)];
+          const init = this.init[xx + (yy * World.width)];
+          init.render(context);
+          tile.render(context);
+        }
       }
     }
+
   }
 }
