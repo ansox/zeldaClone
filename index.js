@@ -1,20 +1,21 @@
 let canvas;
 let context;
 
-const WIDTH = 160;
-const HEIGHT = 120;
+const WIDTH = 240;
+const HEIGHT = 160;
 const SCALE = 3;
 
 let spritesheet;
 let entities = [];
 let player;
-
+let world;
 
 function init() {
   canvas = document.getElementById('canvas');
   context = canvas.getContext('2d');
   context.canvas.width = WIDTH * SCALE;
   context.canvas.height = HEIGHT * SCALE;
+  // context.globalCompositeOperation = "multiply";
   context.scale(SCALE, SCALE);
 
   spritesheet = new Spritesheet();
@@ -22,6 +23,13 @@ function init() {
     player = new Player(0, 0, 16, 16, spritesheet.getSprite(0, 0, 16 * 6, (16 * 3)));
     entities.push(player);
   })
+
+  world = new World();
+  world.loadImage('./imgs/map.png')
+    .then(() => {
+      console.log('ok');
+
+    })
 
   document.addEventListener('keydown', onKeyDown);
   document.addEventListener('keyup', onKeyUp);
@@ -75,6 +83,7 @@ function render() {
   context.fillStyle = "#000"
   context.fillRect(0, 0, WIDTH * SCALE, HEIGHT * SCALE);
 
+  world.render(context);
   entities.forEach(entity => entity.render(context));
 }
 

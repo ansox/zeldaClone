@@ -18,14 +18,14 @@ class Player extends Entity {
     super(x, y, width, height, sprite);
 
     for (let i = 0; i < this.maxIndex; i++) {
-      this.rightPlayer.push(spritesheet.getSprite(0 + (16 * i), 2 * 18, 16, 18));
+      this.rightPlayer.push(spritesheet.getSprite(0 + (16 * i), 2 * 16, 16, 16));
     }
 
     for (let i = 0; i < this.maxIndex; i++) {
-      this.leftPlayer.push(spritesheet.getSprite(0 + (16 * i), 18, 16, 18));
+      this.leftPlayer.push(spritesheet.getSprite(0 + (16 * i), 16, 16, 16));
     }
 
-    this.idlePlayer.push(spritesheet.getSprite(0, -1, 16, 18));
+    this.idlePlayer.push(spritesheet.getSprite(0, -1, 16, 16));
   }
 
   tick() {
