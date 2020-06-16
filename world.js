@@ -1,6 +1,5 @@
 class World {
   static tiles = [];
-  init = [];
   static width;
   static height;
   static TILE_SIZE = 16;
@@ -34,7 +33,7 @@ class World {
           for (let yy = 0; yy < map.height; yy++) {
             const color = mapColor[xx + (yy * map.width)];
 
-            this.init[xx + (yy * map.width)] = new FloorTile(xx * 16, yy * 16, null)
+            World.tiles[xx + (yy * map.width)] = new FloorTile(xx * 16, yy * 16, null);
 
             if (color === '0, 0, 0') {
               World.tiles[xx + (yy * map.width)] = new FloorTile(xx * 16, yy * 16, null)
@@ -42,11 +41,18 @@ class World {
               World.tiles[xx + (yy * map.width)] = new WallTile(xx * 16, yy * 16, null)
             }
             else if (color === '255, 205, 210') {
-              World.tiles[xx + (yy * map.width)] = new LifePack(xx * 16, yy * 16, null)
+              entities.push(new LifePack(xx * 16, yy * 16, null));
+            }
+            else if (color === '33, 150, 243') {
+              player = new Player(xx * 16, yy * 16, null)
+              entities.push(player);
+
             }
             else if (color === '244, 67, 54') {
-              World.tiles[xx + (yy * map.width)] = new Enemy(xx * 16, yy * 16, null)
-
+              // World.tiles[xx + (yy * map.width)] = new Enemy(xx * 16, yy * 16, null)
+              const enemy = new Enemy(xx * 16, yy * 16, null);
+              entities.push(enemy);
+              enimies.push(enemy);
             }
             else {
               World.tiles[xx + (yy * map.width)] = new FloorTile(xx * 16, yy * 16, null)
@@ -102,8 +108,6 @@ class World {
             continue;
           }
           const tile = World.tiles[xx + (yy * World.width)];
-          const init = this.init[xx + (yy * World.width)];
-          init.render(context);
           tile.render(context);
         }
       }

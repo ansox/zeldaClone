@@ -7,6 +7,7 @@ const SCALE = 3;
 
 let spritesheet;
 let entities = [];
+let enimies = [];
 let player;
 let world;
 
@@ -15,14 +16,11 @@ function init() {
   context = canvas.getContext('2d');
   context.canvas.width = WIDTH * SCALE;
   context.canvas.height = HEIGHT * SCALE;
-  // context.globalCompositeOperation = "multiply";
+
   context.scale(SCALE, SCALE);
 
   spritesheet = new Spritesheet();
-  spritesheet.loadImage('./imgs/spritesheet.png').then(() => {
-    player = new Player(20, 30, 16, 16, spritesheet.getSprite(0, 0, 16 * 6, (16 * 3)));
-    entities.push(player);
-  })
+  spritesheet.loadImage('./imgs/spritesheet.png');
 
   world = new World();
   world.loadImage('./imgs/map.png')
