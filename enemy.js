@@ -2,10 +2,24 @@ class Enemy extends Entity {
   width = 16;
   heigth = 16;
   sprite = spritesheet.getSprite(16, 5 * 16, this.width, this.heigth);
-  speed = 1;
+  speed = 0.4;
+  frames = 0;
+  maxFrames = 15;
+  index = 0;
+  maxIndex = 2;
+  sprites = [];
+
+  constructor(x, y, width, height, sprite) {
+    super(x, y, width, height, sprite);
+
+    for (let i = 0; i < this.maxIndex; i++) {
+      this.sprites.push(spritesheet.getSprite(16 + (16 * i), 5 * 16, 16, 16));
+    }
+  }
+
 
   render(context) {
-    context.drawImage(this.sprite, this.x - Camera.x, this.y - Camera.y);
+    context.drawImage(this.sprites[this.index], this.x - Camera.x, this.y - Camera.y);
   }
 
   tick() {
@@ -21,6 +35,16 @@ class Enemy extends Entity {
     } else if (this.y > player.y && World.isFree(this.x, this.y - this.speed) &&
       !this.isColliding(this.x, this.y - this.speed)) {
       this.y -= this.speed;
+    }
+
+    this.frames++;
+
+    if (this.frames > this.maxFrames) {
+      this.frames = 0;
+      this.index++;
+      if (this.index === this.maxIndex) {
+        this.index = 0
+      }
     }
   }
 
