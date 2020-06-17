@@ -10,6 +10,7 @@ let entities = [];
 let enimies = [];
 let player;
 let world;
+let ui;
 
 function init() {
   canvas = document.getElementById('canvas');
@@ -20,19 +21,27 @@ function init() {
   context.scale(SCALE, SCALE);
 
   spritesheet = new Spritesheet();
-  spritesheet.loadImage('./imgs/spritesheet.png');
-
-  world = new World();
-  world.loadImage('./imgs/map.png')
+  spritesheet.loadImage('./imgs/spritesheet.png')
     .then(() => {
-      console.log('ok');
+      player = new Player(-100, -100, 16, 16, spritesheet.getSprite(0, 0, 16 * 6, (16 * 3)));
+      entities.push(player);
 
+      world = new World();
+      world.loadImage('./imgs/map.png')
+        .then(() => {
+          console.log('ok');
+
+        });
+
+      ui = new UI();
+
+      document.addEventListener('keydown', onKeyDown);
+      document.addEventListener('keyup', onKeyUp);
+
+      window.requestAnimationFrame(run);
     })
 
-  document.addEventListener('keydown', onKeyDown);
-  document.addEventListener('keyup', onKeyUp);
 
-  window.requestAnimationFrame(run);
 }
 
 function onKeyDown(e) {
@@ -83,6 +92,7 @@ function render() {
 
   world.render(context);
   entities.forEach(entity => entity.render(context));
+  ui.render(context);
 }
 
 function tick() {

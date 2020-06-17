@@ -44,12 +44,11 @@ class World {
               entities.push(new LifePack(xx * 16, yy * 16, null));
             }
             else if (color === '33, 150, 243') {
-              player = new Player(xx * 16, yy * 16, null)
-              entities.push(player);
+              player.x = xx * 16;
+              player.y = yy * 16;
 
             }
             else if (color === '244, 67, 54') {
-              // World.tiles[xx + (yy * map.width)] = new Enemy(xx * 16, yy * 16, null)
               const enemy = new Enemy(xx * 16, yy * 16, null);
               entities.push(enemy);
               enimies.push(enemy);

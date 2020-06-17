@@ -17,24 +17,40 @@ class Enemy extends Entity {
     }
   }
 
-
   render(context) {
     context.drawImage(this.sprites[this.index], this.x - Camera.x, this.y - Camera.y);
   }
 
   tick() {
-    if (this.x < player.x && World.isFree(this.x + this.speed, this.y) &&
-      !this.isColliding(this.x + this.speed, this.y)) {
-      this.x += this.speed;
-    } else if (this.x > player.x && World.isFree(this.x - this.speed, this.y) &&
-      !this.isColliding(this.x - this.speed, this.y)) {
-      this.x -= this.speed;
-    } if (this.y < player.y && World.isFree(this.x, this.y + this.speed) &&
-      !this.isColliding(this.x, this.y + this.speed)) {
-      this.y += this.speed;
-    } else if (this.y > player.y && World.isFree(this.x, this.y - this.speed) &&
-      !this.isColliding(this.x, this.y - this.speed)) {
-      this.y -= this.speed;
+    if (!this.iscollidingWithPlayer()) {
+      if (this.x < player.x && World.isFree(this.x + this.speed, this.y) &&
+        !this.isColliding(this.x + this.speed, this.y)) {
+        this.x += this.speed;
+      } else if (this.x > player.x && World.isFree(this.x - this.speed, this.y) &&
+        !this.isColliding(this.x - this.speed, this.y)) {
+        this.x -= this.speed;
+      } if (this.y < player.y && World.isFree(this.x, this.y + this.speed) &&
+        !this.isColliding(this.x, this.y + this.speed)) {
+        this.y += this.speed;
+      } else if (this.y > player.y && World.isFree(this.x, this.y - this.speed) &&
+        !this.isColliding(this.x, this.y - this.speed)) {
+        this.y -= this.speed;
+      }
+    }
+    else {
+      let r = Math.floor(Math.random(100) * 100);
+
+      if (r < 15) {
+        player.life--;
+        console.log('Vida: ' + player.life);
+
+      }
+
+      if (player.life <= 0) {
+        // alert('Fim')
+        document.location.reload(true);
+      }
+
     }
 
     this.frames++;
@@ -64,6 +80,14 @@ class Enemy extends Entity {
     }
 
     return false;
+  }
+
+  iscollidingWithPlayer() {
+    let enemyCurrent = new Rectangle(this.x, this.y, World.TILE_SIZE, World.TILE_SIZE);
+    let playerCurrent = new Rectangle(player.x, player.y, World.TILE_SIZE, World.TILE_SIZE);
+
+
+    return enemyCurrent.intersect(playerCurrent);
   }
 
 }

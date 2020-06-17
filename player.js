@@ -13,6 +13,8 @@ class Player extends Entity {
   index = 0;
   maxIndex = 6;
   moved = false;
+  life = 100;
+  maxLife = 100;
 
   constructor(x, y, width, height, sprite) {
     super(x, y, width, height, sprite);
