@@ -21,4 +21,10 @@ class Entity {
 
   }
 
+  static isColliding(entity1, entity2) {
+    const rect1 = new Rectangle(entity1.x, entity1.y, 16, 16);
+    const rect2 = new Rectangle(entity2.x, entity2.y, 16, 16);
+    return rect1.intersect(rect2);
+  }
+
 }

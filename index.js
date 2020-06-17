@@ -11,6 +11,7 @@ let enimies = [];
 let player;
 let world;
 let ui;
+let reload = false;
 
 function init() {
   canvas = document.getElementById('canvas');
@@ -96,6 +97,11 @@ function render() {
 }
 
 function tick() {
+  if (reload) {
+    reload = false;
+    document.location.reload(true);
+    return;
+  }
   entities.forEach(entity => entity.tick());
 }
 

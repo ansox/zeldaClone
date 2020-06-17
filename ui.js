@@ -9,5 +9,7 @@ class UI {
     context.fillStyle = "#fff";
     context.font = "6px Arial";
     context.fillText(`${player.life}/${player.maxLife}`, 32, 10);
+
+    context.fillText(`Ammo: ${player.ammo}`, 200, 10)
   }
 }

@@ -38,19 +38,18 @@ class Enemy extends Entity {
       }
     }
     else {
-      let r = Math.floor(Math.random(100) * 100);
+      if (player.life > 0) {
+        let r = Math.floor(Math.random(100) * 100);
 
-      if (r < 15) {
-        player.life--;
-        console.log('Vida: ' + player.life);
-
+        if (r < 15) {
+          player.life--;
+          player.isDammage = true;
+          console.log('Vida: ' + player.life);
+        }
       }
-
-      if (player.life <= 0) {
-        // alert('Fim')
-        document.location.reload(true);
+      else {
+        reload = true;
       }
-
     }
 
     this.frames++;
@@ -85,7 +84,6 @@ class Enemy extends Entity {
   iscollidingWithPlayer() {
     let enemyCurrent = new Rectangle(this.x, this.y, World.TILE_SIZE, World.TILE_SIZE);
     let playerCurrent = new Rectangle(player.x, player.y, World.TILE_SIZE, World.TILE_SIZE);
-
 
     return enemyCurrent.intersect(playerCurrent);
   }
