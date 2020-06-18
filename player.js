@@ -19,7 +19,7 @@ class Player extends Entity {
   index = 4;
   maxIndex = 6;
   moved = false;
-  life = 100;
+  life = 10;
   maxLife = 100;
   ammo = 0;
   isDammage = false;

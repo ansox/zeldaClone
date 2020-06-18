@@ -18,6 +18,9 @@ let ctxBack;
 started = false;
 restarting = false;
 gameState = 'NORMAL';
+framesGameOver = 0;
+showMessageGameOver = false;
+restartGame = false;
 
 function init() {
   canvas = document.getElementById('canvas');
@@ -94,8 +97,7 @@ function onKeyUp(e) {
   }
 
   if (e.code === 'Enter') {
-    gameState = 'NORMAL';
-    world.restartGame('level1.png');
+    restartGame = true;
   }
 }
 
@@ -117,17 +119,19 @@ function render() {
     ctxBack.globalAlpha = 0.1;
     ctxBack.drawImage(canvas, 0, 0);
 
-    ui.render(context);
-
     if (gameState === 'GAME_OVER') {
       context.fillStyle = 'rgba(0, 0, 0, 0.5)';
       context.fillRect(0, 0, WIDTH * SCALE, HEIGHT * SCALE);
     }
+
+    ui.render(context);
+
   }
 }
 
 function tick() {
   if (gameState === 'NORMAL') {
+    restartGame = false;
 
     entities.forEach(entity => entity.tick());
     bullets.forEach(bullet => bullet.tick());
@@ -145,7 +149,17 @@ function tick() {
       world.restartGame(newWorld);
     }
   } else if (gameState === 'GAME_OVER') {
+    framesGameOver++;
+    if (this.framesGameOver == 30) {
+      this.framesGameOver = 0;
+      this.showMessageGameOver = !this.showMessageGameOver;
+    }
 
+    if (restartGame) {
+      gameState = 'NORMAL';
+      cur_level = 1;
+      world.restartGame('level1.png');
+    }
   }
 
 
