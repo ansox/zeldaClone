@@ -8,16 +8,23 @@ const SCALE = 3;
 let spritesheet;
 let entities = [];
 let enimies = [];
+let bullets = [];
 let player;
 let world;
 let ui;
 let reload = false;
+let ctxBack;
 
 function init() {
   canvas = document.getElementById('canvas');
   context = canvas.getContext('2d');
   context.canvas.width = WIDTH * SCALE;
   context.canvas.height = HEIGHT * SCALE;
+
+  back = document.getElementById('back');
+  ctxBack = back.getContext('2d');
+  ctxBack.canvas.width = 800;
+  ctxBack.canvas.height = 800;
 
   context.scale(SCALE, SCALE);
 
@@ -41,8 +48,6 @@ function init() {
 
       window.requestAnimationFrame(run);
     })
-
-
 }
 
 function onKeyDown(e) {
@@ -79,6 +84,10 @@ function onKeyUp(e) {
   if (e.code === 'ArrowDown') {
     player.down = false;
   }
+
+  if (e.code === 'Space') {
+    player.shoot = true;
+  }
 }
 
 function run() {
@@ -93,6 +102,11 @@ function render() {
 
   world.render(context);
   entities.forEach(entity => entity.render(context));
+  bullets.forEach(bullet => bullet.render(context));
+
+  ctxBack.globalAlpha = 0.1;
+  ctxBack.drawImage(canvas, 0, 0);
+
   ui.render(context);
 }
 
@@ -103,6 +117,7 @@ function tick() {
     return;
   }
   entities.forEach(entity => entity.tick());
+  bullets.forEach(bullet => bullet.tick());
 }
 
 

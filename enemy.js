@@ -1,13 +1,18 @@
 class Enemy extends Entity {
   width = 16;
-  heigth = 16;
-  sprite = spritesheet.getSprite(16, 5 * 16, this.width, this.heigth);
+  height = 16;
+  sprite = spritesheet.getSprite(16, 5 * 16, this.width, this.height);
+  damage = spritesheet.getSprite(4 * 16, 5 * 16, this.width, this.height);
   speed = 0.4;
   frames = 0;
   maxFrames = 15;
   index = 0;
   maxIndex = 2;
   sprites = [];
+  life = 2;
+  isDammaged = false;
+  dammageFrames = 10;
+  dammageCurrent = 0;
 
   constructor(x, y, width, height, sprite) {
     super(x, y, width, height, sprite);
@@ -18,7 +23,15 @@ class Enemy extends Entity {
   }
 
   render(context) {
-    context.drawImage(this.sprites[this.index], this.x - Camera.x, this.y - Camera.y);
+    if (!this.isDammaged) {
+      context.drawImage(this.sprites[this.index], this.x - Camera.x, this.y - Camera.y);
+    }
+    else {
+      context.drawImage(this.damage, this.x - Camera.x, this.y - Camera.y);
+
+    }
+
+
   }
 
   tick() {
@@ -61,6 +74,38 @@ class Enemy extends Entity {
         this.index = 0
       }
     }
+
+    this.collidingBullet();
+
+    if (this.life <= 0) {
+      this.destroySelf();
+    }
+
+    if (this.isDammaged) {
+      this.dammageCurrent++;
+
+      if (this.dammageCurrent == this.dammageFrames) {
+        this.dammageCurrent = 0;
+        this.isDammaged = false;
+      }
+    }
+  }
+
+  destroySelf() {
+    entities = entities.filter(item => item != this);
+    enimies = enimies.filter(item => item != this);
+  }
+
+  collidingBullet() {
+    bullets.forEach(entity => {
+      if (entity instanceof Bullet) {
+        if (Entity.isColliding(this, entity)) {
+          this.isDammaged = true;
+          this.life--;
+          bullets = bullets.filter(item => item != entity)
+        }
+      }
+    })
   }
 
   isColliding(xNext, yNext) {

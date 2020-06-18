@@ -46,6 +46,9 @@ class World {
             else if (color === '255, 235, 59') {
               entities.push(new Ammo(xx * 16, yy * 16, null));
             }
+            else if (color === '255, 152, 0') {
+              entities.push(new Weapon(xx * 16, yy * 16, null));
+            }
             else if (color === '33, 150, 243') {
               player.x = xx * 16;
               player.y = yy * 16;

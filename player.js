@@ -5,6 +5,10 @@ class Player extends Entity {
   down = false;
   speed = 2;
 
+  rightDir = 0;
+  leftDir = 1;
+  dir = this.rightDir;
+
   rightPlayer = [];
   leftPlayer = [];
   idlePlayer = [];
@@ -12,7 +16,7 @@ class Player extends Entity {
 
   frames = 0;
   maxFrames = 6;
-  index = 0;
+  index = 4;
   maxIndex = 6;
   moved = false;
   life = 100;
@@ -20,6 +24,10 @@ class Player extends Entity {
   ammo = 0;
   isDammage = false;
   dammageFrame = 0;
+  hasWeapon = false;
+  shoot = false;
+  WEAPON_RIGHT
+  WEAPON_LEFT
 
   constructor(x, y, width, height, sprite) {
     super(x, y, width, height, sprite);
@@ -35,6 +43,10 @@ class Player extends Entity {
     this.idlePlayer.push(spritesheet.getSprite(0, 0, 16, 16));
 
     this.dammage = spritesheet.getSprite(16 * 5, 0, 16, 16);
+
+    this.WEAPON_RIGHT = spritesheet.getSprite(0, 6 * 16, 16, 16);
+    this.WEAPON_LEFT = spritesheet.getSprite(16, 6 * 16, 16, 16);
+
   }
 
   tick() {
@@ -42,8 +54,10 @@ class Player extends Entity {
     if (this.right && World.isFree(this.x + this.speed, this.y)) {
       this.moved = true;
       this.x += this.speed;
+      this.dir = this.rightDir;
     } else if (this.left && World.isFree(this.x - this.speed, this.y)) {
       this.moved = true;
+      this.dir = this.leftDir;
       this.x -= this.speed;
     } else if (this.up && World.isFree(this.x, this.y - this.speed)) {
       this.moved = true;
@@ -67,6 +81,7 @@ class Player extends Entity {
 
     this.checkCollisionLifePack();
     this.checkCollisionAmmo();
+    this.checkCollisionWeapon();
 
     if (this.isDammage) {
       this.dammageFrame++;
@@ -74,7 +89,27 @@ class Player extends Entity {
         this.dammageFrame = 0;
         this.isDammage = false;
       }
+    }
 
+    if (this.shoot) {
+      this.shoot = false;
+      if (this.hasWeapon && this.ammo > 0) {
+        let dx = 0;
+        let px = 0;
+        let py = 8;
+        if (this.dir == this.rightDir) {
+          dx = 1;
+          px = 20;
+        }
+        else {
+          dx = -1;
+          px = -20;
+        }
+
+        const bullet = new Bullet(this.x + px, this.y + py, this.width, this.height, null, dx, 0);
+        bullets.push(bullet);
+        this.ammo--;
+      }
     }
 
     Camera.x = Camera.clamp(this.x - (WIDTH / 2), 0, World.width * 16 - WIDTH);
@@ -83,17 +118,34 @@ class Player extends Entity {
 
   render(context) {
     if (!this.isDammage) {
-      if (this.right) {
+      if (this.dir == this.rightDir) {
         context.drawImage(this.rightPlayer[this.index], this.x - Camera.x, this.y - Camera.y);
-      } else if (this.left) {
+        if (this.hasWeapon) {
+          context.drawImage(this.WEAPON_RIGHT, this.x + 11 - Camera.x, this.y + 2 - Camera.y);
+        }
+      } else if (this.dir == this.leftDir) {
         context.drawImage(this.leftPlayer[this.index], this.x - Camera.x, this.y - Camera.y);
-      } else {
-        context.drawImage(this.idlePlayer[0], this.x - Camera.x, this.y - Camera.y);
+
+        if (this.hasWeapon) {
+          context.drawImage(this.WEAPON_LEFT, this.x - 11 - Camera.x, this.y + 2 - Camera.y);
+
+        }
       }
     }
     else {
       context.drawImage(this.dammage, this.x - Camera.x, this.y - Camera.y);
     }
+  }
+
+  checkCollisionWeapon() {
+    entities.forEach(entity => {
+      if (entity instanceof Weapon) {
+        if (Entity.isColliding(this, entity)) {
+          this.hasWeapon = true;
+          entities = entities.filter(item => item != entity);
+        }
+      }
+    })
   }
 
   checkCollisionAmmo() {
