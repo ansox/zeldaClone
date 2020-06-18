@@ -1,4 +1,4 @@
-class Spritesheet {
+export default class Spritesheet {
   spritesheet;
   loaded = false;
 

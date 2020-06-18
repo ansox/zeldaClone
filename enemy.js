@@ -1,8 +1,15 @@
-class Enemy extends Entity {
+import Entity from './entity.js';
+import Camera from './camera.js';
+import Game from './game.js';
+import Rectangle from './rectangle.js';
+import World from './world.js';
+import Bullet from './bullet.js';
+
+export default class Enemy extends Entity {
   width = 16;
   height = 16;
-  sprite = spritesheet.getSprite(16, 5 * 16, this.width, this.height);
-  damage = spritesheet.getSprite(4 * 16, 5 * 16, this.width, this.height);
+  sprite = Game.spritesheet.getSprite(16, 5 * 16, this.width, this.height);
+  damage = Game.spritesheet.getSprite(4 * 16, 5 * 16, this.width, this.height);
   speed = 0.4;
   frames = 0;
   maxFrames = 15;
@@ -18,7 +25,7 @@ class Enemy extends Entity {
     super(x, y, width, height, sprite);
 
     for (let i = 0; i < this.maxIndex; i++) {
-      this.sprites.push(spritesheet.getSprite(16 + (16 * i), 5 * 16, 16, 16));
+      this.sprites.push(Game.spritesheet.getSprite(16 + (16 * i), 5 * 16, 16, 16));
     }
   }
 
@@ -36,28 +43,28 @@ class Enemy extends Entity {
 
   tick() {
     if (!this.iscollidingWithPlayer()) {
-      if (this.x < player.x && World.isFree(this.x + this.speed, this.y) &&
+      if (this.x < Game.player.x && World.isFree(this.x + this.speed, this.y) &&
         !this.isColliding(this.x + this.speed, this.y)) {
         this.x += this.speed;
-      } else if (this.x > player.x && World.isFree(this.x - this.speed, this.y) &&
+      } else if (this.x > Game.player.x && World.isFree(this.x - this.speed, this.y) &&
         !this.isColliding(this.x - this.speed, this.y)) {
         this.x -= this.speed;
-      } if (this.y < player.y && World.isFree(this.x, this.y + this.speed) &&
+      } if (this.y < Game.player.y && World.isFree(this.x, this.y + this.speed) &&
         !this.isColliding(this.x, this.y + this.speed)) {
         this.y += this.speed;
-      } else if (this.y > player.y && World.isFree(this.x, this.y - this.speed) &&
+      } else if (this.y > Game.player.y && World.isFree(this.x, this.y - this.speed) &&
         !this.isColliding(this.x, this.y - this.speed)) {
         this.y -= this.speed;
       }
     }
     else {
-      if (player.life > 0) {
+      if (Game.player.life > 0) {
         let r = Math.floor(Math.random(100) * 100);
 
         if (r < 15) {
-          player.life--;
-          player.isDammage = true;
-          console.log('Vida: ' + player.life);
+          Game.player.life--;
+          Game.player.isDammage = true;
+          console.log('Vida: ' + Game.player.life);
         }
       }
     }
@@ -89,17 +96,17 @@ class Enemy extends Entity {
   }
 
   destroySelf() {
-    entities = entities.filter(item => item != this);
-    enimies = enimies.filter(item => item != this);
+    Game.entities = Game.entities.filter(item => item != this);
+    Game.enimies = Game.enimies.filter(item => item != this);
   }
 
   collidingBullet() {
-    bullets.forEach(entity => {
+    Game.bullets.forEach(entity => {
       if (entity instanceof Bullet) {
         if (Entity.isColliding(this, entity)) {
           this.isDammaged = true;
           this.life--;
-          bullets = bullets.filter(item => item != entity)
+          Game.bullets = Game.bullets.filter(item => item != entity)
         }
       }
     })
@@ -108,7 +115,7 @@ class Enemy extends Entity {
   isColliding(xNext, yNext) {
     let enemyCurrent = new Rectangle(xNext, yNext, World.TILE_SIZE, World.TILE_SIZE);
 
-    for (const enemy of enimies) {
+    for (const enemy of Game.enimies) {
       if (enemy === this) {
         continue;
       }
@@ -125,7 +132,7 @@ class Enemy extends Entity {
 
   iscollidingWithPlayer() {
     let enemyCurrent = new Rectangle(this.x, this.y, World.TILE_SIZE, World.TILE_SIZE);
-    let playerCurrent = new Rectangle(player.x, player.y, World.TILE_SIZE, World.TILE_SIZE);
+    let playerCurrent = new Rectangle(Game.player.x, Game.player.y, World.TILE_SIZE, World.TILE_SIZE);
 
     return enemyCurrent.intersect(playerCurrent);
   }

@@ -1,4 +1,4 @@
-class Tile {
+export default class Tile {
   tileFloor;
   tileWall;
 

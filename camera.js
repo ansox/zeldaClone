@@ -1,4 +1,4 @@
-class Camera {
+export default class Camera {
   static x = 0;
   static y = 0;
 

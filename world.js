@@ -1,4 +1,14 @@
-class World {
+import FloorTile from './floor-tile.js';
+import WallTile from './wall-tile.js';
+import Enemy from './enemy.js';
+import Game from './game.js';
+import Ammo from './ammo.js';
+import LifePack from './life-pack.js';
+import Weapon from './weapon.js';
+import Camera from './camera.js';
+import Player from './player.js';
+
+export default class World {
   static tiles = [];
   static width;
   static height;
@@ -41,23 +51,23 @@ class World {
               World.tiles[xx + (yy * map.width)] = new WallTile(xx * 16, yy * 16, null)
             }
             else if (color === '255, 205, 210') {
-              entities.push(new LifePack(xx * 16, yy * 16, null));
+              Game.entities.push(new LifePack(xx * 16, yy * 16, null));
             }
             else if (color === '255, 235, 59') {
-              entities.push(new Ammo(xx * 16, yy * 16, null));
+              Game.entities.push(new Ammo(xx * 16, yy * 16, null));
             }
             else if (color === '255, 152, 0') {
-              entities.push(new Weapon(xx * 16, yy * 16, null));
+              Game.entities.push(new Weapon(xx * 16, yy * 16, null));
             }
             else if (color === '33, 150, 243') {
-              player.x = xx * 16;
-              player.y = yy * 16;
+              Game.player.x = xx * 16;
+              Game.player.y = yy * 16;
 
             }
             else if (color === '244, 67, 54') {
               const enemy = new Enemy(xx * 16, yy * 16, null);
-              entities.push(enemy);
-              enimies.push(enemy);
+              Game.entities.push(enemy);
+              Game.enimies.push(enemy);
             }
             else {
               World.tiles[xx + (yy * map.width)] = new FloorTile(xx * 16, yy * 16, null)
@@ -100,20 +110,20 @@ class World {
   }
 
   restartGame(level) {
-    started = false;
-    entities = [];
-    enimies = [];
-    bullets = [];
+    Game.started = false;
+    Game.entities = [];
+    Game.enimies = [];
+    Game.bullets = [];
 
-    player = new Player(-100, -100, 16, 16, spritesheet.getSprite(0, 0, 16 * 6, (16 * 3)));
-    entities.push(player);
+    Game.player = new Player(-100, -100, 16, 16, Game.spritesheet.getSprite(0, 0, 16 * 6, (16 * 3)));
+    Game.entities.push(Game.player);
 
-    world = new World();
-    world.loadImage(`./imgs/${level}`)
+    Game.world = new World();
+    Game.world.loadImage(`./imgs/${level}`)
       .then(() => {
-        restarting = false;
+        Game.restarting = false;
         console.log('ok');
-        started = true;
+        Game.started = true;
       });
   }
 
@@ -122,8 +132,8 @@ class World {
       let xStart = parseInt(Camera.x / 16);
       let yStart = parseInt(Camera.y / 16);
 
-      let xFinal = parseInt(xStart + (WIDTH / 16));
-      let yFinal = parseInt(yStart + (HEIGHT / 16));
+      let xFinal = parseInt(xStart + (Game.WIDTH / 16));
+      let yFinal = parseInt(yStart + (Game.HEIGHT / 16));
 
       for (let xx = 0; xx <= xFinal; xx++) {
         for (let yy = 0; yy <= yFinal; yy++) {

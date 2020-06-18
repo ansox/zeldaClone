@@ -1,4 +1,6 @@
-class Entity {
+import Rectangle from './rectangle.js';
+
+export default class Entity {
   x = 0;
   y = 0;
   width = 0;

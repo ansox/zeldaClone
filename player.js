@@ -1,4 +1,13 @@
-class Player extends Entity {
+import Entity from './entity.js';
+import Game from './game.js';
+import LifePack from './life-pack.js';
+import Ammo from './ammo.js';
+import Weapon from './weapon.js';
+import Camera from './camera.js';
+import World from './world.js';
+import Bullet from './bullet.js';
+
+export default class Player extends Entity {
   right = false;
   left = false;
   up = false;
@@ -19,7 +28,7 @@ class Player extends Entity {
   index = 4;
   maxIndex = 6;
   moved = false;
-  life = 10;
+  life = 100;
   maxLife = 100;
   ammo = 0;
   isDammage = false;
@@ -33,20 +42,19 @@ class Player extends Entity {
     super(x, y, width, height, sprite);
 
     for (let i = 0; i < this.maxIndex; i++) {
-      this.rightPlayer.push(spritesheet.getSprite(0 + (16 * i), 2 * 16, 16, 16));
+      this.rightPlayer.push(Game.spritesheet.getSprite(0 + (16 * i), 2 * 16, 16, 16));
     }
 
     for (let i = 0; i < this.maxIndex; i++) {
-      this.leftPlayer.push(spritesheet.getSprite(0 + (16 * i), 16, 16, 16));
+      this.leftPlayer.push(Game.spritesheet.getSprite(0 + (16 * i), 16, 16, 16));
     }
 
-    this.idlePlayer.push(spritesheet.getSprite(0, 0, 16, 16));
+    this.idlePlayer.push(Game.spritesheet.getSprite(0, 0, 16, 16));
 
-    this.dammage = spritesheet.getSprite(16 * 5, 0, 16, 16);
+    this.dammage = Game.spritesheet.getSprite(16 * 5, 0, 16, 16);
 
-    this.WEAPON_RIGHT = spritesheet.getSprite(0, 6 * 16, 16, 16);
-    this.WEAPON_LEFT = spritesheet.getSprite(16, 6 * 16, 16, 16);
-
+    this.WEAPON_RIGHT = Game.spritesheet.getSprite(0, 6 * 16, 16, 16);
+    this.WEAPON_LEFT = Game.spritesheet.getSprite(16, 6 * 16, 16, 16);
   }
 
   tick() {
@@ -107,17 +115,17 @@ class Player extends Entity {
         }
 
         const bullet = new Bullet(this.x + px, this.y + py, this.width, this.height, null, dx, 0);
-        bullets.push(bullet);
+        Game.bullets.push(bullet);
         this.ammo--;
       }
     }
 
     if (this.life <= 0) {
-      gameState = 'GAME_OVER'
+      Game.gameState = 'GAME_OVER'
     }
 
-    Camera.x = Camera.clamp(this.x - (WIDTH / 2), 0, World.width * 16 - WIDTH);
-    Camera.y = Camera.clamp(this.y - (HEIGHT / 2), 0, World.height * 16 - HEIGHT);
+    Camera.x = Camera.clamp(this.x - (Game.WIDTH / 2), 0, World.width * 16 - Game.WIDTH);
+    Camera.y = Camera.clamp(this.y - (Game.HEIGHT / 2), 0, World.height * 16 - Game.HEIGHT);
   }
 
   render(context) {
@@ -142,33 +150,33 @@ class Player extends Entity {
   }
 
   checkCollisionWeapon() {
-    entities.forEach(entity => {
+    Game.entities.forEach(entity => {
       if (entity instanceof Weapon) {
         if (Entity.isColliding(this, entity)) {
           this.hasWeapon = true;
-          entities = entities.filter(item => item != entity);
+          Game.entities = Game.entities.filter(item => item != entity);
         }
       }
     })
   }
 
   checkCollisionAmmo() {
-    entities.forEach(entity => {
+    Game.entities.forEach(entity => {
       if (entity instanceof Ammo) {
         if (Entity.isColliding(this, entity)) {
           this.ammo += 10;
-          entities = entities.filter(item => item != entity);
+          Game.entities = Game.entities.filter(item => item != entity);
         }
       }
     })
   }
 
   checkCollisionLifePack() {
-    entities.forEach(entity => {
+    Game.entities.forEach(entity => {
       if (entity instanceof LifePack) {
         if (Entity.isColliding(this, entity)) {
           this.life += 10;
-          entities = entities.filter(item => item != entity);
+          Game.entities = Game.entities.filter(item => item != entity);
 
           this.life = this.life > 100 ? 100 : this.life;
         }

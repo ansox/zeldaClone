@@ -1,4 +1,8 @@
-class Bullet extends Entity {
+import Entity from './entity.js';
+import Camera from './camera.js';
+import Game from './game.js';
+
+export default class Bullet extends Entity {
   dx = 0;
   dy = 0;
   speed = 4;
@@ -17,11 +21,11 @@ class Bullet extends Entity {
 
     this.curLife++;
     if (this.curLife == this.life) {
-      bullets = bullets.filter(bullet => bullet != this);
+      Game.bullets = Game.bullets.filter(bullet => bullet != this);
     }
   }
 
-  render() {
+  render(context) {
     context.fillStyle = "rgba(0, 120, 120, 1)";
     context.fillRect(this.x - Camera.x, this.y - Camera.y, 3, 3);
   }
