@@ -112,6 +112,10 @@ class Player extends Entity {
       }
     }
 
+    if (this.life <= 0) {
+      gameState = 'GAME_OVER'
+    }
+
     Camera.x = Camera.clamp(this.x - (WIDTH / 2), 0, World.width * 16 - WIDTH);
     Camera.y = Camera.clamp(this.y - (HEIGHT / 2), 0, World.height * 16 - HEIGHT);
   }

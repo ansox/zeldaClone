@@ -4,6 +4,8 @@ let context;
 const WIDTH = 240;
 const HEIGHT = 160;
 const SCALE = 3;
+cur_level = 1;
+max_level = 2;
 
 let spritesheet;
 let entities = [];
@@ -12,8 +14,10 @@ let bullets = [];
 let player;
 let world;
 let ui;
-let reload = false;
 let ctxBack;
+started = false;
+restarting = false;
+gameState = 'NORMAL';
 
 function init() {
   canvas = document.getElementById('canvas');
@@ -35,10 +39,10 @@ function init() {
       entities.push(player);
 
       world = new World();
-      world.loadImage('./imgs/map.png')
+      world.loadImage('./imgs/level1.png')
         .then(() => {
           console.log('ok');
-
+          started = true;
         });
 
       ui = new UI();
@@ -88,6 +92,11 @@ function onKeyUp(e) {
   if (e.code === 'Space') {
     player.shoot = true;
   }
+
+  if (e.code === 'Enter') {
+    gameState = 'NORMAL';
+    world.restartGame('level1.png');
+  }
 }
 
 function run() {
@@ -100,25 +109,46 @@ function render() {
   context.fillStyle = "#000"
   context.fillRect(0, 0, WIDTH * SCALE, HEIGHT * SCALE);
 
-  world.render(context);
-  entities.forEach(entity => entity.render(context));
-  bullets.forEach(bullet => bullet.render(context));
+  if (!restarting) {
+    world.render(context);
+    entities.forEach(entity => entity.render(context));
+    bullets.forEach(bullet => bullet.render(context));
 
-  ctxBack.globalAlpha = 0.1;
-  ctxBack.drawImage(canvas, 0, 0);
+    ctxBack.globalAlpha = 0.1;
+    ctxBack.drawImage(canvas, 0, 0);
 
-  ui.render(context);
+    ui.render(context);
+
+    if (gameState === 'GAME_OVER') {
+      context.fillStyle = 'rgba(0, 0, 0, 0.5)';
+      context.fillRect(0, 0, WIDTH * SCALE, HEIGHT * SCALE);
+    }
+  }
 }
 
 function tick() {
-  if (reload) {
-    reload = false;
-    document.location.reload(true);
-    return;
-  }
-  entities.forEach(entity => entity.tick());
-  bullets.forEach(bullet => bullet.tick());
-}
+  if (gameState === 'NORMAL') {
 
+    entities.forEach(entity => entity.tick());
+    bullets.forEach(bullet => bullet.tick());
+
+    if (enimies.length === 0 && started) {
+      started = false;
+      restarting = true;
+      cur_level++;
+      if (cur_level > max_level) {
+        cur_level = 1;
+      }
+      console.log(cur_level);
+
+      let newWorld = `level${cur_level}.png`;
+      world.restartGame(newWorld);
+    }
+  } else if (gameState === 'GAME_OVER') {
+
+  }
+
+
+}
 
 init();

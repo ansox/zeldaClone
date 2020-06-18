@@ -11,5 +11,12 @@ class UI {
     context.fillText(`${player.life}/${player.maxLife}`, 32, 10);
 
     context.fillText(`Ammo: ${player.ammo}`, 200, 10)
+
+    if (gameState === 'GAME_OVER') {
+      context.fillStyle = "#fff";
+      context.font = "15px Arial";
+      context.fillText(`GAME OVER`, parseInt(WIDTH / 2) - 50, parseInt((HEIGHT) / 2) + 10);
+      context.fillText(`Press Enter to restart`, parseInt(WIDTH / 2) - 75, parseInt((HEIGHT) / 2) + 30);
+    }
   }
 }

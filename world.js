@@ -99,6 +99,24 @@ class World {
     return mapColor;
   }
 
+  restartGame(level) {
+    started = false;
+    entities = [];
+    enimies = [];
+    bullets = [];
+
+    player = new Player(-100, -100, 16, 16, spritesheet.getSprite(0, 0, 16 * 6, (16 * 3)));
+    entities.push(player);
+
+    world = new World();
+    world.loadImage(`./imgs/${level}`)
+      .then(() => {
+        restarting = false;
+        console.log('ok');
+        started = true;
+      });
+  }
+
   render(context) {
     if (World.tiles.length > 0) {
       let xStart = parseInt(Camera.x / 16);

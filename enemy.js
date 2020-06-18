@@ -60,9 +60,6 @@ class Enemy extends Entity {
           console.log('Vida: ' + player.life);
         }
       }
-      else {
-        reload = true;
-      }
     }
 
     this.frames++;
