@@ -2,6 +2,8 @@ import Spritesheet from './spritesheet.js';
 import Player from './player.js';
 import World from './world.js';
 import UI from './ui.js';
+import Menu from './menu.js';
+import Sound from './sound.js';
 
 export default class Game {
   canvas;
@@ -22,12 +24,14 @@ export default class Game {
   static world;
   static ui;
   static showMessageGameOver = false;
-  static gameState = 'NORMAL';
+  static gameState = 'MENU';
   static restarting = false;
   static started = false;
 
   framesGameOver = 0;
   restartGame = false;
+
+  menu;
 
   start() {
     this.canvas = document.getElementById('canvas');
@@ -45,6 +49,7 @@ export default class Game {
     Game.spritesheet = new Spritesheet();
     Game.spritesheet.loadImage('./imgs/spritesheet.png')
       .then(() => {
+        // Sound.musicBackground.loop();
         Game.player = new Player(-100, -100, 16, 16, Game.spritesheet.getSprite(0, 0, 16 * 6, (16 * 3)));
         Game.entities.push(Game.player);
 
@@ -56,6 +61,7 @@ export default class Game {
           });
 
         this.ui = new UI();
+        this.menu = new Menu();
 
         document.addEventListener('keydown', this.onKeyDown.bind(this));
         document.addEventListener('keyup', this.onKeyUp.bind(this));
@@ -75,10 +81,18 @@ export default class Game {
 
     if (e.code === 'ArrowUp') {
       Game.player.up = true;
+
+      if (Game.gameState === 'MENU') {
+        this.menu.up = true;
+      }
     }
 
     if (e.code === 'ArrowDown') {
       Game.player.down = true;
+
+      if (Game.gameState === 'MENU') {
+        this.menu.down = true;
+      }
     }
 
     if (e.code === 'Space') {
@@ -87,6 +101,15 @@ export default class Game {
 
     if (e.code === 'Enter') {
       this.restartGame = true;
+
+      if (Game.gameState === 'MENU') {
+        this.menu.enter = true;
+      }
+    }
+
+    if (e.code === 'Escape') {
+      Game.gameState = 'MENU';
+      this.menu.pause = true;
     }
   }
 
@@ -115,23 +138,27 @@ export default class Game {
   }
 
   render() {
-    this.context.fillStyle = "#000"
-    this.context.fillRect(0, 0, Game.WIDTH * Game.SCALE, Game.HEIGHT * Game.SCALE);
+    if (Game.gameState === 'NORMAL' || Game.gameState === 'GAME_OVER') {
+      this.context.fillStyle = "#000"
+      this.context.fillRect(0, 0, Game.WIDTH * Game.SCALE, Game.HEIGHT * Game.SCALE);
 
-    if (!Game.restarting) {
-      Game.world.render(this.context);
-      Game.entities.forEach(entity => entity.render(this.context));
-      Game.bullets.forEach(bullet => bullet.render(this.context));
+      if (!Game.restarting) {
+        Game.world.render(this.context);
+        Game.entities.forEach(entity => entity.render(this.context));
+        Game.bullets.forEach(bullet => bullet.render(this.context));
 
-      this.ctxBack.globalAlpha = 0.1;
-      this.ctxBack.drawImage(this.canvas, 0, 0);
+        this.ctxBack.globalAlpha = 0.1;
+        this.ctxBack.drawImage(this.canvas, 0, 0);
 
-      if (Game.gameState === 'GAME_OVER') {
-        this.context.fillStyle = 'rgba(0, 0, 0, 0.5)';
-        this.context.fillRect(0, 0, Game.WIDTH * Game.SCALE, Game.HEIGHT * Game.SCALE);
+        if (Game.gameState === 'GAME_OVER') {
+          this.context.fillStyle = 'rgba(0, 0, 0, 0.5)';
+          this.context.fillRect(0, 0, Game.WIDTH * Game.SCALE, Game.HEIGHT * Game.SCALE);
+        }
+
+        this.ui.render(this.context);
       }
-
-      this.ui.render(this.context);
+    } else if (Game.gameState === 'MENU') {
+      this.menu.render(this.context);
     }
   }
 
@@ -165,6 +192,8 @@ export default class Game {
         this.cur_level = 1;
         Game.world.restartGame('level1.png');
       }
+    } else if (Game.gameState === 'MENU') {
+      this.menu.tick();
     }
 
   }

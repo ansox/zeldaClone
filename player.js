@@ -6,6 +6,7 @@ import Weapon from './weapon.js';
 import Camera from './camera.js';
 import World from './world.js';
 import Bullet from './bullet.js';
+import Sound from './sound.js';
 
 export default class Player extends Entity {
   right = false;
@@ -102,6 +103,8 @@ export default class Player extends Entity {
     if (this.shoot) {
       this.shoot = false;
       if (this.hasWeapon && this.ammo > 0) {
+        Sound.ShootEffect.play();
+
         let dx = 0;
         let px = 0;
         let py = 8;
@@ -153,6 +156,7 @@ export default class Player extends Entity {
     Game.entities.forEach(entity => {
       if (entity instanceof Weapon) {
         if (Entity.isColliding(this, entity)) {
+          Sound.PickEffect.play();
           this.hasWeapon = true;
           Game.entities = Game.entities.filter(item => item != entity);
         }
@@ -164,6 +168,7 @@ export default class Player extends Entity {
     Game.entities.forEach(entity => {
       if (entity instanceof Ammo) {
         if (Entity.isColliding(this, entity)) {
+          Sound.PickEffect.play();
           this.ammo += 10;
           Game.entities = Game.entities.filter(item => item != entity);
         }
@@ -175,6 +180,7 @@ export default class Player extends Entity {
     Game.entities.forEach(entity => {
       if (entity instanceof LifePack) {
         if (Entity.isColliding(this, entity)) {
+          Sound.PickEffect.play();
           this.life += 10;
           Game.entities = Game.entities.filter(item => item != entity);
 

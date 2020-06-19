@@ -4,6 +4,7 @@ import Game from './game.js';
 import Rectangle from './rectangle.js';
 import World from './world.js';
 import Bullet from './bullet.js';
+import Sound from './sound.js';
 
 export default class Enemy extends Entity {
   width = 16;
@@ -62,6 +63,7 @@ export default class Enemy extends Entity {
         let r = Math.floor(Math.random(100) * 100);
 
         if (r < 15) {
+          Sound.hitEffect.play();
           Game.player.life--;
           Game.player.isDammage = true;
           console.log('Vida: ' + Game.player.life);
