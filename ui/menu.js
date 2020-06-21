@@ -1,4 +1,4 @@
-import Game from './game.js';
+import Game from '../game.js';
 
 export default class Menu {
   options = ['New Game', 'Load Game', 'Quit'];

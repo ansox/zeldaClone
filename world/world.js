@@ -1,12 +1,12 @@
 import FloorTile from './floor-tile.js';
 import WallTile from './wall-tile.js';
-import Enemy from './enemy.js';
-import Game from './game.js';
-import Ammo from './ammo.js';
-import LifePack from './life-pack.js';
-import Weapon from './weapon.js';
+import Enemy from '../entities/enemy.js';
+import Game from '../game.js';
+import Ammo from '../entities/ammo.js';
+import LifePack from '../entities/life-pack.js';
+import Weapon from '../entities/weapon.js';
 import Camera from './camera.js';
-import Player from './player.js';
+import Player from '../entities/player.js';
 
 export default class World {
   static tiles = [];
@@ -30,7 +30,7 @@ export default class World {
     return !(World.tiles[x1 + (y1 * this.width)] instanceof WallTile ||
       World.tiles[x2 + (y2 * this.width)] instanceof WallTile ||
       World.tiles[x3 + (y3 * this.width)] instanceof WallTile ||
-      World.tiles[x4 + (y4 * this.width)] instanceof WallTile);
+      World.tiles[x4 + (y4 * this.width)] instanceof WallTile)
   }
 
   loadImage(path) {

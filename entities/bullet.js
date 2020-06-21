@@ -1,6 +1,6 @@
 import Entity from './entity.js';
-import Camera from './camera.js';
-import Game from './game.js';
+import Camera from '../world/camera.js';
+import Game from '../game.js';
 
 export default class Bullet extends Entity {
   dx = 0;

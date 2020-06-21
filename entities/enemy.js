@@ -1,10 +1,10 @@
 import Entity from './entity.js';
-import Camera from './camera.js';
-import Game from './game.js';
-import Rectangle from './rectangle.js';
-import World from './world.js';
+import Camera from '../world/camera.js';
+import Game from '../game.js';
+import Rectangle from '../core/rectangle.js';
+import World from '../world/world.js';
 import Bullet from './bullet.js';
-import Sound from './sound.js';
+import Sound from '../core/sound.js';
 
 export default class Enemy extends Entity {
   width = 16;

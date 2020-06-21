@@ -1,12 +1,12 @@
 import Entity from './entity.js';
-import Game from './game.js';
+import Game from '../game.js';
 import LifePack from './life-pack.js';
 import Ammo from './ammo.js';
 import Weapon from './weapon.js';
-import Camera from './camera.js';
-import World from './world.js';
+import Camera from '../world/camera.js';
+import World from '../world/world.js';
 import Bullet from './bullet.js';
-import Sound from './sound.js';
+import Sound from '../core/sound.js';
 
 export default class Player extends Entity {
   right = false;

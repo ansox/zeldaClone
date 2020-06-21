@@ -1,4 +1,4 @@
-import Rectangle from './rectangle.js';
+import Rectangle from '../core/rectangle.js';
 
 export default class Entity {
   x = 0;

@@ -1,6 +1,6 @@
 import Entity from './entity.js';
-import Game from './game.js';
-import Camera from './camera.js';
+import Game from '../game.js';
+import Camera from '../world/camera.js';
 
 export default class Weapon extends Entity {
   width = 16;

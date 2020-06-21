@@ -1,9 +1,8 @@
-import Spritesheet from './spritesheet.js';
-import Player from './player.js';
-import World from './world.js';
-import UI from './ui.js';
-import Menu from './menu.js';
-import Sound from './sound.js';
+import Spritesheet from './core/spritesheet.js';
+import Player from './entities/player.js';
+import World from './world/world.js';
+import UI from './ui/ui.js';
+import Menu from './ui/menu.js';
 
 export default class Game {
   canvas;
