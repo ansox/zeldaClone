@@ -7,6 +7,19 @@ export default class Entity {
   height = 0;
   sprite;
   path;
+  depth = 0;
+
+  static nodeSorter = (e0, e1) => {
+    if (e1.depth < e0.depth) {
+      return 1;
+    }
+
+    if (e1.depth > e0.depth) {
+      return -1;
+    }
+
+    return 0;
+  }
 
   constructor(x, y, width, height, sprite) {
     this.x = x;

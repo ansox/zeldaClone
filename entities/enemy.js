@@ -42,6 +42,7 @@ export default class Enemy extends Entity {
   }
 
   tick() {
+    this.depth = 0;
     if (!this.iscollidingWithPlayer()) {
       if (this.path == null || this.path.length == 0) {
         let start = new Vector2i(parseInt(this.x / 16), parseInt(this.y / 16));

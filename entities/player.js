@@ -59,6 +59,7 @@ export default class Player extends Entity {
   }
 
   tick() {
+    this.depth = 1;
     this.moved = false;
     if (this.right && World.isFree(this.x + this.speed, this.y)) {
       this.moved = true;

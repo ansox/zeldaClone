@@ -4,6 +4,7 @@ import World from './world/world.js';
 import UI from './ui/ui.js';
 import Menu from './ui/menu.js';
 import Sound from './core/sound.js';
+import Entity from './entities/entity.js';
 
 export default class Game {
   canvas;
@@ -144,6 +145,7 @@ export default class Game {
 
       if (!Game.restarting) {
         Game.world.render(this.context);
+        Game.entities.sort(Entity.nodeSorter);
         Game.entities.forEach(entity => entity.render(this.context));
         Game.bullets.forEach(bullet => bullet.render(this.context));
 
