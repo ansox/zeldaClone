@@ -127,6 +127,11 @@ export default class Player extends Entity {
       Game.gameState = 'GAME_OVER'
     }
 
+    this.updateCamera();
+
+  }
+
+  updateCamera() {
     Camera.x = Camera.clamp(this.x - (Game.WIDTH / 2), 0, World.width * 16 - Game.WIDTH);
     Camera.y = Camera.clamp(this.y - (Game.HEIGHT / 2), 0, World.height * 16 - Game.HEIGHT);
   }

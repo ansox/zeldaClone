@@ -5,6 +5,8 @@ import Rectangle from '../core/rectangle.js';
 import World from '../world/world.js';
 import Bullet from './bullet.js';
 import Sound from '../core/sound.js';
+import Vector2i from '../world/vector2i.js';
+import AStar from '../world/a-star.js';
 
 export default class Enemy extends Entity {
   width = 16;
@@ -36,29 +38,17 @@ export default class Enemy extends Entity {
     }
     else {
       context.drawImage(this.damage, this.x - Camera.x, this.y - Camera.y);
-
     }
-
-
   }
 
   tick() {
     if (!this.iscollidingWithPlayer()) {
-      if (this.x < Game.player.x && World.isFree(this.x + this.speed, this.y) &&
-        !this.isColliding(this.x + this.speed, this.y)) {
-        this.x += this.speed;
-      } else if (this.x > Game.player.x && World.isFree(this.x - this.speed, this.y) &&
-        !this.isColliding(this.x - this.speed, this.y)) {
-        this.x -= this.speed;
-      } if (this.y < Game.player.y && World.isFree(this.x, this.y + this.speed) &&
-        !this.isColliding(this.x, this.y + this.speed)) {
-        this.y += this.speed;
-      } else if (this.y > Game.player.y && World.isFree(this.x, this.y - this.speed) &&
-        !this.isColliding(this.x, this.y - this.speed)) {
-        this.y -= this.speed;
+      if (this.path == null || this.path.length == 0) {
+        let start = new Vector2i(parseInt(this.x / 16), parseInt(this.y / 16));
+        let end = new Vector2i(parseInt(Game.player.x / 16), parseInt(Game.player.y / 16));
+        this.path = AStar.findPath(Game.world, start, end)
       }
-    }
-    else {
+    } else {
       if (Game.player.life > 0) {
         let r = Math.floor(Math.random(100) * 100);
 
@@ -70,6 +60,8 @@ export default class Enemy extends Entity {
         }
       }
     }
+
+    this.followPath(this.path);
 
     this.frames++;
 

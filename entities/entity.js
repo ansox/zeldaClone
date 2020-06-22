@@ -6,6 +6,7 @@ export default class Entity {
   width = 0;
   height = 0;
   sprite;
+  path;
 
   constructor(x, y, width, height, sprite) {
     this.x = x;
@@ -22,6 +23,31 @@ export default class Entity {
   tick() {
 
   }
+
+  followPath(path) {
+    if (path != null) {
+      if (path.length > 0) {
+        let target = path[path.length - 1].tile;
+
+        if (this.x < target.x * 16) {
+          this.x++;
+        } else if (this.x > target.x * 16) {
+          this.x--
+        }
+
+        if (this.y < target.y * 16) {
+          this.y++;
+        } else if (this.y > target.y * 16) {
+          this.y--;
+        }
+
+        if (this.x == target.x * 16 && this.y == target.y * 16) {
+          path.pop();
+        }
+      }
+    }
+  }
+
 
   static isColliding(entity1, entity2) {
     const rect1 = new Rectangle(entity1.x, entity1.y, 16, 16);

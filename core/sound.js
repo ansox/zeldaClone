@@ -20,6 +20,7 @@ export default class Sound {
   loop() {
     this.clip.loop = true;
     this.clip.currentTime = 0;
+    this.clip.volume = 0.2;
     this.clip.play();
   }
 }

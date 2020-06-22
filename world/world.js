@@ -38,6 +38,8 @@ export default class World {
     return new Promise(resolve => {
       map.onload = () => {
         const mapColor = this.getMapColor(map);
+        World.width = map.width;
+        World.height = map.height;
 
         for (let xx = 0; xx < map.width; xx++) {
           for (let yy = 0; yy < map.height; yy++) {

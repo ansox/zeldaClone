@@ -3,6 +3,7 @@ import Player from './entities/player.js';
 import World from './world/world.js';
 import UI from './ui/ui.js';
 import Menu from './ui/menu.js';
+import Sound from './core/sound.js';
 
 export default class Game {
   canvas;
@@ -157,6 +158,7 @@ export default class Game {
         this.ui.render(this.context);
       }
     } else if (Game.gameState === 'MENU') {
+      Game.player.updateCamera();
       this.menu.render(this.context);
     }
   }
