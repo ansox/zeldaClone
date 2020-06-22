@@ -57,7 +57,6 @@ export default class Enemy extends Entity {
           Sound.hitEffect.play();
           Game.player.life--;
           Game.player.isDammage = true;
-          console.log('Vida: ' + Game.player.life);
         }
       }
     }

@@ -124,7 +124,6 @@ export default class World {
     Game.world.loadImage(`./imgs/${level}`)
       .then(() => {
         Game.restarting = false;
-        console.log('ok');
         Game.started = true;
       });
   }

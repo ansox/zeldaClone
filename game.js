@@ -57,7 +57,6 @@ export default class Game {
         Game.world = new World();
         Game.world.loadImage('./imgs/level1.png')
           .then(() => {
-            console.log('ok');
             Game.started = true;
           });
 

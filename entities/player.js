@@ -129,7 +129,6 @@ export default class Player extends Entity {
     }
 
     this.updateCamera();
-
   }
 
   updateCamera() {
@@ -149,7 +148,6 @@ export default class Player extends Entity {
 
         if (this.hasWeapon) {
           context.drawImage(this.WEAPON_LEFT, this.x - 11 - Camera.x, this.y + 2 - Camera.y);
-
         }
       }
     }
