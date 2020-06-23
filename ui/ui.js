@@ -57,6 +57,6 @@ export default class UI {
       }
     }
 
-    context.drawImage(canvas, 200, 20)
+    context.drawImage(canvas, Game.WIDTH - World.width - 10, 20)
   }
 }
